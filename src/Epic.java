@@ -2,8 +2,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Epic extends Task  {
-
+public class Epic extends Task {
 
 
     List<Subtask> includedSabtaks = new ArrayList<>();
@@ -14,17 +13,29 @@ public class Epic extends Task  {
         this.includedSabtaks = includedSabtaks;
     }
 
-    public void updateStatusEpic (Epic epic) {
+    public void updateStatusEpic(Epic epic) {
         if (includedSabtaks.isEmpty()) {
-         epic.status = "NEW";
+            epic.status = "NEW";
         } else {
+            boolean isDone = true;
+            boolean isNew = true;
             for (Subtask subtask : includedSabtaks) {
-
-                //условия если все дан, не все дан, все нью. Сохраняю статус
+                if (subtask.status != "NEW"){
+                    isNew = false;
+                }
+                if (subtask.status != "DONE"){
+                    isDone = false;
+                }
+            }
+            if (isDone) {
+                epic.status = "DONE";
+            } else if (isNew) {
+                epic.status = "NEW";
+            } else {
+                epic.status = "IN_PROGRESS"
             }
         }
     }
-
 
 
     public List<Subtask> getIncludedSabtaks() {
