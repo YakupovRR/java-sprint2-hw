@@ -13,6 +13,7 @@ public class Epic extends Task {
         this.includedSabtaks = includedSabtaks;
     }
 
+    //Проверка статуса эпика
     public void updateStatusEpic(Epic epic) {
         if (includedSabtaks.isEmpty()) {
             epic.status = "NEW";
@@ -32,7 +33,7 @@ public class Epic extends Task {
             } else if (isNew) {
                 epic.status = "NEW";
             } else {
-                epic.status = "IN_PROGRESS"
+                epic.status = "IN_PROGRESS";
             }
         }
     }
@@ -45,4 +46,14 @@ public class Epic extends Task {
     public void setIncludedSabtaks(List<Subtask> includedSabtaks) {
         this.includedSabtaks = includedSabtaks;
     }
+
+    //что возвращаем? Лист? Что принимаем? Эпик?
+public List<Subtask> getSubtaskOfEpic (Epic epic) {
+        assert epic != null;
+        return epic.includedSabtaks;
+    }
+
+
+
+
 }
