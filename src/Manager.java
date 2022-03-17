@@ -4,12 +4,26 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Manager {
-    public Long id = 0;
+    public Long id = 0L;
+
+
 
     HashMap <Long, Epic > epicMap = new HashMap<>();
     HashMap <Long, Subtask > subtaskMap = new HashMap<>();
     HashMap <Long, Task > taskMap = new HashMap<>();
 
+
+    public HashMap<Long, Epic> getEpicMap() {
+        return epicMap;
+    }
+
+    public HashMap<Long, Subtask> getSubtaskMap() {
+        return subtaskMap;
+    }
+
+    public HashMap<Long, Task> getTaskMap() {
+        return taskMap;
+    }
 
 //Получения списка всех задач для каждого типа
 
@@ -24,14 +38,16 @@ public class Manager {
     }
 
 //Удаление всех задач
-    public List<Task> clearTasks() {
-        return new HashMap<>(taskMap.clear());
+    public void clearTasks() {
+        taskMap.clear();
     }
-    public List<Epic> clearEpics() {
-        return new HashMap<>(epicMap.clear());
+    public void clearEpics() {
+        epicMap.clear();
+
     }
-    public List<Subtask> clearSubtasks() {
-        return new ArrayList<>(subtaskMap.clear());
+    public void clearSubtasks() {
+
+        subtaskMap.clear();
     }
 
 //Получение по индефикатору
@@ -50,19 +66,26 @@ public class Manager {
 
     // Созданние.
     public void putTask (Task task) {
-        id++;
+       // id++;
         taskMap.put(id, task);
     }
     public void putEpic (Epic epic) {
-        id++;
+        //id++;
         epicMap.put(id, epic);
     }
     public void putSubtask (Subtask subtask) {
-        id++;
+        // id++;
         subtaskMap.put(id, subtask);
         //запустить метод проверки статуса эпика
         subtask.getParentEpic().epic.updateStatusEpic;
     }
+
+    public Long nextId () {
+        ++id;
+        Long id;
+    }
+
+
 
 //Обновление
     public void getById(Long replaceId, Task replaceTask) {

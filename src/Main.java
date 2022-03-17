@@ -1,32 +1,36 @@
 public class Main {
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
+        Manager manager = new Manager();
 
-//чисто реализиуем консоль???
 //а как id-то присваивать? Может изначально ставить -1?
-//и статус для эпика вначале как? Просто NEW
 
-Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", id, "NEW");
-Task takeUotTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", id, "IN_PROGRESS");
-Epic fixCar = new Epic("Починить машину", "Починить ходовку", id, "NEW");
-Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", id, "IN_PROGRESS");
-Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", id, "NEX");
-Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", id, "NEW");
-Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", id, "DONE");
+
+        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
+        Task takeUotTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
+        Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
+        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS");
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEX");
+        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
+        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE");
 
 
 //он хочет, что методы были static, но тогда там вылазиет ошибка
-Manager.putTask(washedDishes);
-Manager.putTask(takeUotTrash);
-Manager.putEpic(fixCar);
-Manager.putSubtask(buySpares);
-Manager.putSubtask(comeService);
-Manager.putEpic(buyFood);
-Manager.putSubtask(shoppingAshan);
+        manager.putTask(washedDishes);
+        manager.putTask(takeUotTrash);
+        manager.putEpic(fixCar);
+        manager.putSubtask(buySpares);
+        manager.putSubtask(comeService);
+        manager.putEpic(buyFood);
+        manager.putSubtask(shoppingAshan);
 
 
 // а как распечатать список
-        System.out.println(Manager.epicMap);
+        for (Task i : manager.getEpicMap().values()) {
+            System.out.println(i.title);
+        }
+
+
 
 
         /*
