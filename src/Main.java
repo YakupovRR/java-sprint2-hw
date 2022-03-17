@@ -15,6 +15,16 @@ Epic buyFood = new Epic("Купить продукты", "Купить прод�
 Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", id, "DONE");
 
 
+//он хочет, что методы были static, но тогда там вылазиет ошибка
+Manager.putTask(washedDishes);
+Manager.putTask(takeUotTrash);
+Manager.putEpic(fixCar);
+Manager.putSubtask(buySpares);
+Manager.putSubtask(comeService);
+Manager.putEpic(buyFood);
+Manager.putSubtask(shoppingAshan);
+
+
 // а как распечатать список
         System.out.println(Manager.epicMap);
 
