@@ -1,9 +1,8 @@
 public class Main {
+    static Manager manager = new Manager();
+
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
-        Manager manager = new Manager();
-
-//а как id-то присваивать? Может изначально ставить -1?
 
 
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
@@ -15,23 +14,58 @@ public class Main {
         Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
 
 
-//он хочет, что методы были static, но тогда там вылазиет ошибка
         manager.putTask(washedDishes);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putTask(takeUotTrash);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putEpic(fixCar);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(buySpares);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(comeService);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putEpic(buyFood);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(shoppingAshan);
+        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
+
+        printTitleTasks();
+
+    }
 
 
-// а как распечатать список
-        for (Task i : manager.getEpicMap().values()) {
-            System.out.println(i.title);
+
+    // для удобства проверки печатаю список названий задач
+         public static void printTitleTasks() {
+
+            System.out.println("Список Задач:");
+            if (manager.taskMap.isEmpty()) {
+                System.out.println("Список Задач пуст");
+            } else {
+                for (Task i : manager.getTaskMap().values()) {
+                    System.out.println(i.title);
+                }
+            }
+
+            System.out.println("Список Эпиков:");
+            if (manager.epicMap.isEmpty()) {
+                System.out.println("Список Эпиков пуст");
+            } else {
+                for (Task i : manager.getEpicMap().values()) {
+                    System.out.println(i.title);
+                }
+            }
+
+            System.out.println("Список Подзадач:");
+            if (manager.subtaskMap.isEmpty()) {
+                System.out.println("Список Подзадач пуст");
+            } else {
+                for (Task i : manager.getSubtaskMap().values()) {
+                    System.out.println(i.title);
+                }
+            }
+
         }
-
-
-
 
         /*
         Создайте 2 задачи, один эпик с 2 подзадачами, а другой эпик с 1 подзадачей.
@@ -42,6 +76,6 @@ public class Main {
 
          */
 
-    }
+
 
 }

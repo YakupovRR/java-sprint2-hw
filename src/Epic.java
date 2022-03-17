@@ -10,12 +10,13 @@ public class Epic extends Task {
 
     public Epic(String title, String description, Long id, String status) {
         super(title, description, id, status);
+        this.includedSabtaks = includedSabtaks;
     }
 
     //Проверка статуса эпика
-    public void updateStatusEpic(Epic epic) {
+    public void updateStatusEpic() {
         if (includedSabtaks.isEmpty()) {
-            epic.status = "NEW";
+          this.status = "NEW";
         } else {
             boolean isDone = true;
             boolean isNew = true;
@@ -28,11 +29,11 @@ public class Epic extends Task {
                 }
             }
             if (isDone) {
-                epic.status = "DONE";
+                this.status = "DONE";
             } else if (isNew) {
-                epic.status = "NEW";
+                this.status = "NEW";
             } else {
-                epic.status = "IN_PROGRESS";
+                this.status = "IN_PROGRESS";
             }
         }
     }
@@ -46,13 +47,13 @@ public class Epic extends Task {
         this.includedSabtaks = includedSabtaks;
     }
 
-    //что возвращаем? Лист? Что принимаем? Эпик?
 public List<Subtask> getSubtaskOfEpic (Epic epic) {
-        assert epic != null;
+        if (epic != null){
         return epic.includedSabtaks;
+    } else {
+            System.out.println("Эпик пуст");
+            return null;
+        }
+
     }
-
-
-
-
 }
