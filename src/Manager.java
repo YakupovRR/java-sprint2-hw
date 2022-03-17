@@ -82,7 +82,8 @@ public class Manager {
 
     public Long nextId () {
         ++id;
-        Long id;
+        return id;
+
     }
 
 
@@ -92,13 +93,13 @@ public class Manager {
         if (replaceId<0||replaceId>id) {
             System.out.println("Некорректный id");
         } else if (epicMap.containsKey(replaceId)) {             // в Эпик
-            epicMap.replace(replaceId, (Epic) replaceTask);
+            epicMap.put(replaceId, (Epic) replaceTask);
 
         } else if (subtaskMap.containsKey(replaceId)) {           // В сабтаску
-
+        subtaskMap.put(replaceId, (Subtask) replaceTask);
             // (Subtask) replaceTask.parentEpic;  хз что для чего я это писал
+//            subtaskMap.get(replaceId, (Subtask) replaceTask);
 
-            subtaskMap.get(replaceId, (Subtask) replaceTask);
             //нужно взять пэрэнт эпик этого сабтаска и запустить ему updateStatusEpic
             //но как он ему сохранит? это же по факту другой объект? Искать в хэшмапе с эпиками такой же и выставлять?
             Epic intermediateEpic = new Epic();          // создал эпик-прокладку

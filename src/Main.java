@@ -9,10 +9,10 @@ public class Main {
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
         Task takeUotTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
         Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
-        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS");
-        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEX");
+        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS", fixCar);
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEX", fixCar);
         Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
-        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE");
+        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
 
 
 //он хочет, что методы были static, но тогда там вылазиет ошибка

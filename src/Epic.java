@@ -8,9 +8,8 @@ public class Epic extends Task {
     List<Subtask> includedSabtaks = new ArrayList<>();
 
 
-    public Epic(String title, String description, Long id, String status, List<Subtask> includedSabtaks) {
+    public Epic(String title, String description, Long id, String status) {
         super(title, description, id, status);
-        this.includedSabtaks = includedSabtaks;
     }
 
     //Проверка статуса эпика
