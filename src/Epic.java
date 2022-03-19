@@ -2,12 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    List<Subtask> includedSabtaks = new ArrayList<>(); // pri popytke perenosa vse lomaetsya
+    List<Subtask> includedSabtaks;
 
     public Epic(String title, String description, Long id, String status) {
         super(title, description, id, status);
-
-        this.includedSabtaks = includedSabtaks;
+        List<Subtask> includedSabtaks = new ArrayList<>();
     }
 
     public void updateStatusEpic() {               //Проверка статуса эпика
@@ -40,7 +39,10 @@ public class Epic extends Task {
 
     public void addNewSubtusk(Subtask subtask) {
         includedSabtaks.add(subtask);
+    }
 
+    public void deleteFromIncludedSabtaks (Subtask subtask) {
+        includedSabtaks.remove(subtask);
     }
 
     public List<Subtask> getIncludedSabtaks() {
