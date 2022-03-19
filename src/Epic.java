@@ -6,7 +6,7 @@ public class Epic extends Task {
 
     public Epic(String title, String description, Long id, String status) {
         super(title, description, id, status);
-        List<Subtask> includedSabtaks = new ArrayList<>();
+        this.includedSabtaks = new ArrayList<>();
     }
 
     public void updateStatusEpic() {               //Проверка статуса эпика
