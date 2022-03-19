@@ -127,7 +127,7 @@ public class Manager {
             epicMap.remove(getId);
         } else if (subtaskMap.containsKey(getId)) {
             Subtask deleteSubtask = subtaskMap.remove(getId);
-            /////////
+            deleteSubtask.getParentEpic().deleteFromIncludedSabtaks(deleteSubtask);
             deleteSubtask.getParentEpic().updateStatusEpic();
         } else if (taskMap.containsKey(getId)) {
             taskMap.remove(getId);
