@@ -1,8 +1,8 @@
 public class Task {
-    String title;
-    String description;
-    Long id;
-    String status;
+    private String title;
+    private String description;
+    private Long id;
+    private String status;
 
     Task(String title, String description, Long id, String status) {
         this.title = title;

@@ -4,73 +4,66 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
 
-        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
-        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
-        Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
-        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS", fixCar);
-        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEW", fixCar);
-        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
-        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
+        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", 1L, "NEW");
+        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", 2L, "IN_PROGRESS");
+        Epic fixCar = new Epic("Починить машину", "Починить ходовку", 3L, "NEW");
+        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", 4L, "IN_PROGRESS", fixCar);
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", 5L, "NEW", fixCar);
+        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", 6L, "NEW");
+        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", 7L, "DONE", buyFood);
 
         manager.putTask(washedDishes);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putTask(takeOutTrash);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putEpic(fixCar);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(buySpares);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(comeService);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putEpic(buyFood);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(shoppingAshan);
-        System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         printTitleTasks();
-        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.status);
-        takeOutTrash.status = "DONE";
+        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.getStatus());
+        takeOutTrash.setStatus("DONE");
 
-        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.status);
-        System.out.println("Статус эпика Починить машину - " + fixCar.status);
-        buySpares.status = "DONE";
-        manager.updateTask(4L, buySpares);
-        comeService.status = "DONE";
-        manager.updateTask(5L, buySpares);
-        System.out.println("Статус эпика Починить машину - " + fixCar.status);
+        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.getStatus());
+        System.out.println("Статус эпика Починить машину - " + fixCar.getStatus());
+        buySpares.setStatus("DONE");
+        manager.updateTask(buySpares.getId(), buySpares);
+        comeService.setStatus("DONE");
+        manager.updateTask(buySpares.getId(), buySpares);
+        System.out.println("Статус эпика Починить машину - " + fixCar.getStatus());
 
     }
 
     // для удобства проверки печатаю список названий задач
-         public static void printTitleTasks() {
+    public static void printTitleTasks() {
 
-            System.out.println("Список Задач:");
-            if (manager.taskMap.isEmpty()) {
-                System.out.println("Список Задач пуст");
-            } else {
-                for (Task i : manager.getTaskMap().values()) {
-                    System.out.println(i.title);
-                }
+        System.out.println("Список Задач:");
+        if (manager.taskMap.isEmpty()) {
+            System.out.println("Список Задач пуст");
+        } else {
+            for (Task i : manager.getTaskMap().values()) {
+                System.out.println(i.getTitle());
             }
-
-            System.out.println("Список Эпиков:");
-            if (manager.epicMap.isEmpty()) {
-                System.out.println("Список Эпиков пуст");
-            } else {
-                for (Task i : manager.getEpicMap().values()) {
-                    System.out.println(i.title);
-                }
-            }
-
-            System.out.println("Список Подзадач:");
-            if (manager.subtaskMap.isEmpty()) {
-                System.out.println("Список Подзадач пуст");
-            } else {
-                for (Task i : manager.getSubtaskMap().values()) {
-                    System.out.println(i.title);
-                }
-            }
-
         }
+
+        System.out.println("Список Эпиков:");
+        if (manager.epicMap.isEmpty()) {
+            System.out.println("Список Эпиков пуст");
+        } else {
+            for (Task i : manager.getEpicMap().values()) {
+                System.out.println(i.getTitle());
+            }
+        }
+
+        System.out.println("Список Подзадач:");
+        if (manager.subtaskMap.isEmpty()) {
+            System.out.println("Список Подзадач пуст");
+        } else {
+            for (Task i : manager.getSubtaskMap().values()) {
+                System.out.println(i.getTitle());
+            }
+        }
+
+    }
 
         /*
         Создайте 2 задачи, один эпик с 2 подзадачами, а другой эпик с 1 подзадачей.
@@ -80,7 +73,6 @@ public class Main {
 Воспользуйтесь дебаггером, поставляемым вместе со средой разработки, что бы понять логику работы программы и отладить.
 
          */
-
 
 
 }

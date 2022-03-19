@@ -1,5 +1,5 @@
 public class Subtask extends Task {
-    Epic parentEpic;
+    private Epic parentEpic;
 
     public Subtask(String title, String description, Long id, String status, Epic parentEpic) {
         super(title, description, id, status);
@@ -14,9 +14,5 @@ public class Subtask extends Task {
         this.parentEpic = parentEpic;
     }
 
-    @Override
-    public void setStatus(String status) {
-        super.setStatus(status);
-        //
     }
-}
+

@@ -64,14 +64,15 @@ public class Manager {
     }
 
     public void clearSubtasks() {
-
         subtaskMap.clear();
-    for (Epic i: epicMap.values()) //на случай, если вдруг решим удалить только сабтаски, а эпики оставить
-        i.status = "NEW";
+        for (Epic i : epicMap.values()) { //на случай, если вдруг решим удалить только сабтаски, а эпики оставить
+            i.includedSabtaks.clear();
+            i.updateStatusEpic();
+        }
     }
 
     public Task getTaskById(Long desiredId) {              //получение задачи по id
-        if (desiredId < 1 || desiredId > id) {
+        if (desiredId < 1) {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
@@ -87,45 +88,45 @@ public class Manager {
     }
 
     public void putTask(Task task) {                    // Созданние.
-        taskMap.put(id, task);
-        id++;
+        taskMap.put(task.getId(), task);
     }
 
     public void putEpic(Epic epic) {
-        epicMap.put(id, epic);
+        epicMap.put(epic.getId(), epic);
         id++;
     }
 
     public void putSubtask(Subtask subtask) {
-        subtaskMap.put(id, subtask);
-        (subtask.getParentEpic()).getIncludedSabtaks().add(subtask);
+        subtaskMap.put(subtask.getId(), subtask);
+        (subtask.getParentEpic()).addNewSubtusk(subtask);
         subtask.getParentEpic().updateStatusEpic();
-        id++;
+
     }
 
     public void updateTask(Long replaceId, Task replaceTask) {       //Обновление задачи
-        if (replaceId < 1 || replaceId > id) {
-            System.out.println("Некорректный ввод id");
+        if (replaceId < 1) {
+            System.out.println("Некорректный ввод id обновляемой задачи");
         } else if (epicMap.containsKey(replaceId)) {
             epicMap.put(replaceId, (Epic) replaceTask);
         } else if (subtaskMap.containsKey(replaceId)) {
             subtaskMap.put(replaceId, (Subtask) replaceTask);
-            (((Subtask) replaceTask).getParentEpic()).getIncludedSabtaks().add((Subtask) replaceTask);
-            ((Subtask) replaceTask).getParentEpic().updateStatusEpic();
+            Epic parentEpic = ((Subtask) replaceTask).getParentEpic();
+            parentEpic.getIncludedSabtaks().add((Subtask) replaceTask);
+            parentEpic.updateStatusEpic();
         } else if (taskMap.containsKey(replaceId)) {
             taskMap.put(replaceId, replaceTask);
         } else {
-            System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
+            System.out.println("Задачи с таким id не найдено. Возможно, она была удалена");
         }
     }
 
     public void removeById(long getId) {                  //Удаление по индефикатору
-        if (getId < 1 || getId > id) {
+        if (getId < 1) {
             System.out.println("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
             epicMap.remove(getId);
         } else if (subtaskMap.containsKey(getId)) {
-           Subtask deleteSubtask =  subtaskMap.remove(getId);
+            Subtask deleteSubtask = subtaskMap.remove(getId);
             subtaskMap.remove(getId);
             deleteSubtask.getParentEpic().updateStatusEpic();
         } else if (taskMap.containsKey(getId)) {
@@ -135,11 +136,13 @@ public class Manager {
         }
     }
 
-    public Long nextId() {
-        Long newId = id;
-        id ++;
-        return newId;
-
+    public List<Subtask> getSubtaskOfEpic(Epic epic) {
+        if (epic != null) {
+            return epic.includedSabtaks;
+        } else {
+            System.out.println("Эпик пуст");
+            return null;
+        }
     }
 }
 
