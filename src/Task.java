@@ -1,11 +1,8 @@
-import java.util.HashMap;
-
 public class Task {
     String title;
     String description;
     Long id;
     String status;
-
 
     Task(String title, String description, Long id, String status) {
         this.title = title;

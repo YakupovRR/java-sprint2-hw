@@ -4,19 +4,17 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
 
-
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
-        Task takeUotTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
+        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
         Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
         Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS", fixCar);
-        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEX", fixCar);
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEW", fixCar);
         Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
         Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
 
-
         manager.putTask(washedDishes);
         System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
-        manager.putTask(takeUotTrash);
+        manager.putTask(takeOutTrash);
         System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putEpic(fixCar);
         System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
@@ -28,12 +26,19 @@ public class Main {
         System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
         manager.putSubtask(shoppingAshan);
         System.out.println("Пункт добавлен. Текущий id - "+ manager.id);
-
         printTitleTasks();
+        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.status);
+        takeOutTrash.status = "DONE";
+
+        System.out.println("Статус задачи Вынести мусор - " + takeOutTrash.status);
+        System.out.println("Статус эпика Починить машину - " + fixCar.status);
+        buySpares.status = "DONE";
+        manager.updateTask(4L, buySpares);
+        comeService.status = "DONE";
+        manager.updateTask(5L, buySpares);
+        System.out.println("Статус эпика Починить машину - " + fixCar.status);
 
     }
-
-
 
     // для удобства проверки печатаю список названий задач
          public static void printTitleTasks() {
