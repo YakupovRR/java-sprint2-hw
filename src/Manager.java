@@ -72,7 +72,7 @@ public class Manager {
     }
 
     public Task getTaskById(Long desiredId) {              //получение задачи по id
-        if (desiredId < 1) {
+        if (desiredId < 1 || desiredId > id) {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
@@ -88,24 +88,28 @@ public class Manager {
     }
 
     public void putTask(Task task) {                    // Созданние.
-        taskMap.put(task.getId(), task);
+        task.setId(id);
+        taskMap.put(id, task);
         id++;
     }
 
     public void putEpic(Epic epic) {
-        epicMap.put(epic.getId(), epic);
+        epic.setId(id);
+        epicMap.put(id, epic);
         id++;
     }
 
     public void putSubtask(Subtask subtask) {
-        subtaskMap.put(subtask.getId(), subtask);
+        subtask.setId(id);
+        subtaskMap.put(id, subtask);
         (subtask.getParentEpic()).addNewSubtusk(subtask);
         subtask.getParentEpic().updateStatusEpic();
         id++;
     }
 
     public void updateTask(Long replaceId, Task replaceTask) {       //Обновление задачи
-        if (replaceId < 1) {
+        replaceTask.setId(replaceId);
+        if (replaceId < 1 || replaceId >id) {
             System.out.println("Некорректный ввод id обновляемой задачи");
         } else if (epicMap.containsKey(replaceId)) {
             epicMap.put(replaceId, (Epic) replaceTask);
@@ -122,7 +126,7 @@ public class Manager {
     }
 
     public void removeById(long getId) {                  //Удаление по индефикатору
-        if (getId < 1) {
+        if (getId < 1 || getId > id) {
             System.out.println("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
             epicMap.remove(getId);
@@ -144,12 +148,6 @@ public class Manager {
             System.out.println("Эпик пуст");
             return null;
         }
-    }
-
-    public Long nextId() {      //без него в данном варианте реализации никак
-        Long newId = id;
-        id++;
-        return newId;
     }
 }
 

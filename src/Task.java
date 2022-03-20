@@ -4,10 +4,9 @@ public class Task {
     private Long id;
     private String status;
 
-    Task(String title, String description, Long id, String status) {
+    Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
-        this.id = id;
         this.status = status;
     }
 

@@ -9,13 +9,13 @@ public class Main {
         // Если я правильно понимаю, мы всё-таки храним в объекте задачи id, которому она принадлежит
         // Я пока другой логики реализации, кроме как того, что до этого предлагал не вижу
 
-        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
-        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
-        Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
-        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS", fixCar);
-        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEW", fixCar);
-        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
-        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
+        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", "NEW");
+        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", "IN_PROGRESS");
+        Epic fixCar = new Epic("Починить машину", "Починить ходовку", "NEW");
+        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", "IN_PROGRESS", fixCar);
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис","NEW", fixCar);
+        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", "NEW");
+        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", "DONE", buyFood);
 
         manager.putTask(washedDishes);
         manager.putTask(takeOutTrash);
