@@ -2,20 +2,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    List<Subtask> includedSabtaks;
+    private List<Subtask> includedSubtaks;
 
-    public Epic(String title, String description, Long id, String status) {
-        super(title, description, id, status);
-        this.includedSabtaks = new ArrayList<>();
+    public Epic(String title, String description, String status) {
+        super(title, description, status);
+        this.includedSubtaks = new ArrayList<>();
     }
 
     public void updateStatusEpic() {               //Проверка статуса эпика
-        if (includedSabtaks.isEmpty()) {
+        if (includedSubtaks.isEmpty()) {
             this.setStatus("NEW");
         } else {
             boolean isDone = true;
             boolean isNew = true;
-            for (Subtask subtask : includedSabtaks) {
+            for (Subtask subtask : includedSubtaks) {
                 if (subtask.getStatus() != "NEW") {
                     isNew = false;
                 }
@@ -34,23 +34,23 @@ public class Epic extends Task {
     }
 
     public void clearOfSubtusks () {
-        includedSabtaks.clear();
+        includedSubtaks.clear();
     }
 
     public void addNewSubtusk(Subtask subtask) {
-        includedSabtaks.add(subtask);
+        includedSubtaks.add(subtask);
     }
 
-    public void deleteFromIncludedSabtaks (Subtask subtask) {
-        includedSabtaks.remove(subtask);
+    public void deleteFromincludedSubtaks (Subtask subtask) {
+        includedSubtaks.remove(subtask);
     }
 
-    public List<Subtask> getIncludedSabtaks() {
-        return includedSabtaks;
+    public List<Subtask> getincludedSubtaks() {
+        return includedSubtaks;
     }
 
-    public void setIncludedSabtaks(List<Subtask> includedSabtaks) {
-        this.includedSabtaks = includedSabtaks;
+    public void setincludedSubtaks(List<Subtask> includedSubtaks) {
+        this.includedSubtaks = includedSubtaks;
     }
 
 }

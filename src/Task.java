@@ -1,13 +1,11 @@
 public class Task {
     private String title;
     private String description;
-    private Long id;
     private String status;
 
-    Task(String title, String description, Long id, String status) {
+    Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
-        this.id = id;
         this.status = status;
     }
 
@@ -25,14 +23,6 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getStatus() {
