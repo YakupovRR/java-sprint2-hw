@@ -4,7 +4,7 @@ import java.util.List;
 
 
 public class Manager {
-    public Long id = 1L;
+    public Long id = 0L;
     HashMap<Long, Task> taskMap = new HashMap<>();
     HashMap<Long, Epic> epicMap = new HashMap<>();
     HashMap<Long, Subtask> subtaskMap = new HashMap<>();
@@ -72,7 +72,7 @@ public class Manager {
     }
 
     public Task getTaskById(Long desiredId) {              //получение задачи по id
-        if (desiredId < 1 || desiredId>id) {
+        if (desiredId < 1) {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
@@ -88,24 +88,24 @@ public class Manager {
     }
 
     public void putTask(Task task) {                    // Созданние.
-        taskMap.put(id, task);
+        taskMap.put(task.getId(), task);
         id++;
     }
 
     public void putEpic(Epic epic) {
-        epicMap.put(id, epic);
+        epicMap.put(epic.getId(), epic);
         id++;
     }
 
     public void putSubtask(Subtask subtask) {
-        subtaskMap.put(id, subtask);
+        subtaskMap.put(subtask.getId(), subtask);
         (subtask.getParentEpic()).addNewSubtusk(subtask);
         subtask.getParentEpic().updateStatusEpic();
         id++;
     }
 
     public void updateTask(Long replaceId, Task replaceTask) {       //Обновление задачи
-        if (replaceId < 1 || replaceId>id) {
+        if (replaceId < 1) {
             System.out.println("Некорректный ввод id обновляемой задачи");
         } else if (epicMap.containsKey(replaceId)) {
             epicMap.put(replaceId, (Epic) replaceTask);
@@ -122,7 +122,7 @@ public class Manager {
     }
 
     public void removeById(long getId) {                  //Удаление по индефикатору
-        if (getId < 1 || getId> id) {
+        if (getId < 1) {
             System.out.println("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
             epicMap.remove(getId);
@@ -146,5 +146,10 @@ public class Manager {
         }
     }
 
+    public Long nextId() {      //без него в данном варианте реализации никак
+        Long newId = id;
+        id++;
+        return newId;
+    }
 }
 

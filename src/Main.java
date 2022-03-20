@@ -4,13 +4,18 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
 
-        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", 1L, "NEW");
-        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", 2L, "IN_PROGRESS");
-        Epic fixCar = new Epic("Починить машину", "Починить ходовку", 3L, "NEW");
-        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", 4L, "IN_PROGRESS", fixCar);
-        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", 5L, "NEW", fixCar);
-        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", 6L, "NEW");
-        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", 7L, "DONE", buyFood);
+        // Из ТЗ : "Если вы храните эпики в HashMap, где ключами являются идентификаторы,
+        // то обновление — это запись нового эпика epics.put(epic.getId(), epic))"
+        // Если я правильно понимаю, мы всё-таки храним в объекте задачи id, которому она принадлежит
+        // Я пока другой логики реализации, кроме как того, что до этого предлагал не вижу
+
+        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", manager.nextId(), "NEW");
+        Task takeOutTrash = new Task("Вынести мусор", "Вынести уже наконец мусор", manager.nextId(), "IN_PROGRESS");
+        Epic fixCar = new Epic("Починить машину", "Починить ходовку", manager.nextId(), "NEW");
+        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", manager.nextId(), "IN_PROGRESS", fixCar);
+        Subtask comeService = new Subtask("Заехать в сервис", "Позвонить и приехать в автосервис", manager.nextId(), "NEW", fixCar);
+        Epic buyFood = new Epic("Купить продукты", "Купить продуктов на неделю", manager.nextId(), "NEW");
+        Subtask shoppingAshan = new Subtask("Закупки в Ашане", "Купить продукты на неделю в Ашане", manager.nextId(), "DONE", buyFood);
 
         manager.putTask(washedDishes);
         manager.putTask(takeOutTrash);
