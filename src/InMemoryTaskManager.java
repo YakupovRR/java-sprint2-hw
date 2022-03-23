@@ -3,24 +3,29 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class Manager {
-    public Long id = 0L;
+class InMemoryTaskManager implements TaskManager {
+    private Long id = 0L;
     HashMap<Long, Task> taskMap = new HashMap<>();
     HashMap<Long, Epic> epicMap = new HashMap<>();
     HashMap<Long, Subtask> subtaskMap = new HashMap<>();
+    List<Task> historyList = new ArrayList<>();
 
+    @Override
     public HashMap<Long, Epic> getEpicMap() {
         return epicMap;
     }
 
+    @Override
     public HashMap<Long, Subtask> getSubtaskMap() {
         return subtaskMap;
     }
 
+    @Override
     public HashMap<Long, Task> getTaskMap() {
         return taskMap;
     }
 
+    @Override
     public List<Task> getTasks() {      //Получения списка всех задач для каждого типа
         if (taskMap.isEmpty()) {
             System.out.println("Список Задач пуст");
@@ -30,6 +35,7 @@ public class Manager {
         }
     }
 
+    @Override
     public List<Epic> getEpics() {
         if (epicMap.isEmpty()) {
             System.out.println("Список Эпиков пуст");
@@ -39,6 +45,7 @@ public class Manager {
         }
     }
 
+    @Override
     public List<Subtask> getSubtasks() {
         if (taskMap.isEmpty()) {
             System.out.println("Список Задач пуст");
@@ -48,21 +55,25 @@ public class Manager {
         }
     }
 
+    @Override
     public void clearAllTasks() {            //Удаление всех задач
         clearTasks();
         clearEpics();
         clearSubtasks();
     }
 
+    @Override
     public void clearTasks() {
         taskMap.clear();
     }
 
+    @Override
     public void clearEpics() {
         subtaskMap.clear();   //на случай, если вдруг решим удалить только эпики, а такси оставить
         epicMap.clear();
     }
 
+    @Override
     public void clearSubtasks() {
         subtaskMap.clear();
         for (Epic i : epicMap.values()) { //на случай, если вдруг решим удалить только сабтаски, а эпики оставить
@@ -71,15 +82,19 @@ public class Manager {
         }
     }
 
+    @Override
     public Task getTaskById(Long desiredId) {              //получение задачи по id
         if (desiredId < 1 || desiredId > id) {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
+            setHistory((Task) epicMap.get(desiredId));
             return (Task) epicMap.get(desiredId);
         } else if (subtaskMap.containsKey(desiredId)) {
+            setHistory((Task) subtaskMap.get(desiredId));
             return (Task) subtaskMap.get(desiredId);
         } else if (taskMap.containsKey(desiredId)) {
+            setHistory(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
             System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
@@ -87,18 +102,21 @@ public class Manager {
         }
     }
 
+    @Override
     public void putTask(Task task) {                    // Созданние.
         task.setId(id);
         taskMap.put(id, task);
         id++;
     }
 
+    @Override
     public void putEpic(Epic epic) {
         epic.setId(id);
         epicMap.put(id, epic);
         id++;
     }
 
+    @Override
     public void putSubtask(Subtask subtask) {
         subtask.setId(id);
         subtaskMap.put(id, subtask);
@@ -107,9 +125,10 @@ public class Manager {
         id++;
     }
 
+    @Override
     public void updateTask(Long replaceId, Task replaceTask) {       //Обновление задачи
         replaceTask.setId(replaceId);
-        if (replaceId < 1 || replaceId >id) {
+        if (replaceId < 1 || replaceId > id) {
             System.out.println("Некорректный ввод id обновляемой задачи");
         } else if (epicMap.containsKey(replaceId)) {
             epicMap.put(replaceId, (Epic) replaceTask);
@@ -125,6 +144,7 @@ public class Manager {
         }
     }
 
+    @Override
     public void removeById(long getId) {                  //Удаление по индефикатору
         if (getId < 1 || getId > id) {
             System.out.println("Некорректный ввод id");
@@ -141,6 +161,7 @@ public class Manager {
         }
     }
 
+    @Override
     public List<Subtask> getSubtaskOfEpic(Epic epic) {
         if (epic != null) {
             return epic.getincludedSubtaks();
@@ -149,5 +170,21 @@ public class Manager {
             return null;
         }
     }
+
+    @Override
+    public List<Task> getHistory() {     //вызов истории
+        return historyList;
+    }
+
+   @Override
+    public void setHistory(Task task) {
+        int maxHistoryListLength = 10;
+        while (historyList.size() >= maxHistoryListLength) {
+            historyList.remove(0);
+        }
+    historyList.add(task);
+}
+
+
 }
 
