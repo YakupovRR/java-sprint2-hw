@@ -8,7 +8,7 @@ class InMemoryTaskManager implements TaskManager {
     HashMap<Long, Task> taskMap = new HashMap<>();
     HashMap<Long, Epic> epicMap = new HashMap<>();
     HashMap<Long, Subtask> subtaskMap = new HashMap<>();
-    InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
+    HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public HashMap<Long, Epic> getEpicMap() {
