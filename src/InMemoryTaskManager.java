@@ -8,7 +8,7 @@ class InMemoryTaskManager implements TaskManager {
     HashMap<Long, Task> taskMap = new HashMap<>();
     HashMap<Long, Epic> epicMap = new HashMap<>();
     HashMap<Long, Subtask> subtaskMap = new HashMap<>();
-    List<Task> historyList = new ArrayList<>();
+    InMemoryHistoryManager inMemoryHistoryManager = new InMemoryHistoryManager();
 
     @Override
     public HashMap<Long, Epic> getEpicMap() {
@@ -88,13 +88,13 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
-            setHistory((Task) epicMap.get(desiredId));
+            inMemoryHistoryManager.setHistory((Task) epicMap.get(desiredId));
             return (Task) epicMap.get(desiredId);
         } else if (subtaskMap.containsKey(desiredId)) {
-            setHistory((Task) subtaskMap.get(desiredId));
+            inMemoryHistoryManager.setHistory((Task) subtaskMap.get(desiredId));
             return (Task) subtaskMap.get(desiredId);
         } else if (taskMap.containsKey(desiredId)) {
-            setHistory(taskMap.get(desiredId));
+            inMemoryHistoryManager.setHistory(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
             System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
@@ -171,10 +171,7 @@ class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    @Override
-    public List<Task> getHistory() {     //вызов истории
-        return historyList;
-    }
+
 
 
     
