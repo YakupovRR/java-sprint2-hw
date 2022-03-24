@@ -3,7 +3,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager{
     private static List<Task> historyList  = new ArrayList<>();
-
+    private int maxHistoryListLength = 10;
 
     @Override
     public List<Task> getHistory() {     //вызов истории
@@ -12,7 +12,6 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public void setHistory(Task task) {
-        int maxHistoryListLength = 10;
         while (historyList.size() >= maxHistoryListLength) {
             historyList.remove(0);
         }

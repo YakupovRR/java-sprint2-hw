@@ -176,14 +176,9 @@ class InMemoryTaskManager implements TaskManager {
         return historyList;
     }
 
-   @Override
-    public void setHistory(Task task) {
-        int maxHistoryListLength = 10;
-        while (historyList.size() >= maxHistoryListLength) {
-            historyList.remove(0);
-        }
-    historyList.add(task);
-}
+
+    
+
 
 
 }
