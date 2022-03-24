@@ -4,6 +4,6 @@ public class Managers {
     }
 
     public static HistoryManager getDefaultHistory() {
-        return InMemoryHistoryManager.getHistoryList();
+        return  new InMemoryHistoryManager();
     }
 }

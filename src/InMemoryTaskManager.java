@@ -88,13 +88,13 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
-            inMemoryHistoryManager.setHistory((Task) epicMap.get(desiredId));
+            historyManager.setHistory((Task) epicMap.get(desiredId));
             return (Task) epicMap.get(desiredId);
         } else if (subtaskMap.containsKey(desiredId)) {
-            inMemoryHistoryManager.setHistory((Task) subtaskMap.get(desiredId));
+            historyManager.setHistory((Task) subtaskMap.get(desiredId));
             return (Task) subtaskMap.get(desiredId);
         } else if (taskMap.containsKey(desiredId)) {
-            inMemoryHistoryManager.setHistory(taskMap.get(desiredId));
+            historyManager.setHistory(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
             System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
