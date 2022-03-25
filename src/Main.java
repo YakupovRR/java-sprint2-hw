@@ -1,6 +1,5 @@
 public class Main {
     static InMemoryTaskManager manager = new InMemoryTaskManager();
-    static HistoryManager historyManager = Managers.getDefaultHistory();
 
     public static void main(String[] args) {
         System.out.println("Пришло время практики!");
@@ -30,14 +29,14 @@ public class Main {
         comeService.setStatus(Status.DONE);
         manager.updateTask(buySpares.getId(), buySpares);
         System.out.println("Статус эпика Починить машину - " + fixCar.getStatus());
-        System.out.println(historyManager.getHistory());
+        System.out.println(manager.history());
         System.out.println(washedDishes.getId());
         System.out.println(takeOutTrash.getId());
         manager.getTaskById(1L);
-        historyManager.getHistory();
+        manager.history();
         manager.getTaskById(2L);
-        historyManager.getHistory();
-if(historyManager.getHistory().isEmpty()) {
+        manager.history();
+if(manager.history().isEmpty()) {
     System.out.println("Список пуст");
 } else {
     System.out.println("Список не пуст");

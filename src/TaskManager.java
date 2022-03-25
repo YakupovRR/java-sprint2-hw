@@ -38,6 +38,6 @@ public interface TaskManager {
 
     List<Subtask> getSubtaskOfEpic(Epic epic);
 
-
+List<Task> history();
 
 }
