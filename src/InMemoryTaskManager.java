@@ -88,13 +88,13 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
-            historyManager.setHistory((Task) epicMap.get(desiredId));
+            historyManager.linkLast((Task) epicMap.get(desiredId));
             return (Task) epicMap.get(desiredId);
         } else if (subtaskMap.containsKey(desiredId)) {
-            historyManager.setHistory((Task) subtaskMap.get(desiredId));
+            historyManager.linkLast((Task) subtaskMap.get(desiredId));
             return (Task) subtaskMap.get(desiredId);
         } else if (taskMap.containsKey(desiredId)) {
-            historyManager.setHistory(taskMap.get(desiredId));
+            historyManager.linkLast(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
             System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
@@ -150,12 +150,15 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
             epicMap.remove(getId);
+            historyManager.removeNode(getId);
         } else if (subtaskMap.containsKey(getId)) {
             Subtask deleteSubtask = subtaskMap.remove(getId);
             deleteSubtask.getParentEpic().deleteFromincludedSubtaks(deleteSubtask);
             deleteSubtask.getParentEpic().updateStatusEpic();
+            historyManager.removeNode(getId);
         } else if (taskMap.containsKey(getId)) {
             taskMap.remove(getId);
+            historyManager.removeNode(getId);
         } else {
             System.out.println("Задачи с таким id не существует. Вероятно, она уже была удалена");
         }
@@ -171,9 +174,5 @@ class InMemoryTaskManager implements TaskManager {
         }
     }
 
-@Override
-public List<Task> history(){
- return historyManager.getHistory();
 }
-             }
 

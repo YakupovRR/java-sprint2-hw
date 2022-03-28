@@ -4,16 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-   private static Node tail = null ;             //может final?
-    private int maxHistoryListLength = 10;
+   private static Node head = null;
+    private static Node tail = null;
     private Map<Long, Node> references;
-    //Node history;
 
 
-    public static void setHistoryList(List<Task> historyList) {
+  /*  public static void setHistoryList(List<Task> historyList) {
         InMemoryHistoryManager.historyList = historyList;
     }
-
+*/
 
     @Override
     public List<Task> history() {     //вызов истории
@@ -29,7 +28,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
 
-    @Override
+    //@Override
     public void add (Task task) {
         linkLast(task);
     }
@@ -108,28 +107,5 @@ final Node node = references.get(id);
         public void setNext(Node next) {
             this.next = next;
         }
-
-
-
-
-   /* public void linkLast(Task task) {
-        Node newHead = new Node(task);
-        if (head != null) {
-            Node oldHead = head;
-            oldHead.setPrev(newHead);
-            nodeMap.put(oldHead.getData().getIdNumber(), oldHead);
-            newHead.setNext(oldHead);
-            tail = oldHead;
-        }
-        if (tail == null) {
-            tail = newHead;
-        }
-        head = newHead;
-        nodeMap.put(newHead.getData().getIdNumber(), newHead);
-    } */
-
-
     }
-
-
 }
