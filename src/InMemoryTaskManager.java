@@ -4,7 +4,7 @@ import java.util.List;
 
 
 class InMemoryTaskManager implements TaskManager {
-    private Long id = 0L;
+    private Long id = 1L;
     HashMap<Long, Task> taskMap = new HashMap<>();
     HashMap<Long, Epic> epicMap = new HashMap<>();
     HashMap<Long, Subtask> subtaskMap = new HashMap<>();
@@ -174,5 +174,13 @@ class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public List<Task> history() {
+        return historyManager.history();
+    }
+@Override
+    public Long getId() {
+        return id;
+    }
 }
 

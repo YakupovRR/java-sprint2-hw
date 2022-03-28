@@ -1,78 +1,64 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-   private static Node head = null;
+    private static Node head = null;
     private static Node tail = null;
-    private Map<Long, Node> references;
+    private static Map<Long, Node> references;
+    List<Task> historyList = new ArrayList<>();
 
-
-  /*  public static void setHistoryList(List<Task> historyList) {
-        InMemoryHistoryManager.historyList = historyList;
-    }
-*/
-
-    @Override
+   @Override
     public List<Task> history() {     //вызов истории
         ArrayList<Task> tasks = new ArrayList<>();
-        if (head !=null) {
+        if (head != null) {
             Node first = head;
             while (first != null) {
-                tasks.add(first.reference);     //через гетер?
+                tasks.add(first.reference);
                 first = first.getNext();
             }
         }
         return tasks;
     }
 
-
-    //@Override
-    public void add (Task task) {
-        linkLast(task);
-    }
-
-
-    public void linkLast(Task task) {                //добавление таски setHistory
+    public void linkLast(Task task) {
         if (references.containsKey(task.getId())) {
-         removeNode(task.getId());           //у меня возвращается Long?
+            removeNode(task.getId());
         }
-        final Node oldTail = tail;      //тут баг?
-final Node last = new Node (
-        oldTail,
-        null,
-        task
+        final Node oldTail = tail;
+        final Node last = new Node(
+                oldTail,
+                null,
+                task
         );
-if (head == null) {
-    head = last;
-}
-if (oldTail != null) {
-    oldTail.setNext(last);
-}
+        if (head == null) {
+            head = last;
+        }
+        if (oldTail != null) {
+            oldTail.setNext(last);
+        }
         tail = last;
         references.put(task.getId(), last);
-
     }
 
     @Override
     public void removeNode(Long id) {
-final Node node = references.get(id);
-       if (node != null) {
-        final Node prev = node.getPrev();
-        final Node next = node.getNext();
-        if (prev!=null) {
-            prev.setNext(next);
-        } else  {
-            head = next;
+        final Node node = references.get(id);
+        if (node != null) {
+            final Node prev = node.getPrev();
+            final Node next = node.getNext();
+            if (prev != null) {
+                prev.setNext(next);
+            } else {
+                head = next;
+            }
+            if (next != null) {
+                next.setPrev(prev);
+            } else {
+                tail = prev;
+            }
+            references.remove(id);
         }
-        if (next!=null) {
-            next.setPrev(prev);
-        } else  {
-            tail = prev;
-        }
-    references.remove(id);
-       }
     }
 
     class Node {
@@ -93,7 +79,7 @@ final Node node = references.get(id);
         }
 
         public Node getPrev() {
-            return prev;   //не this.prev?
+            return prev;
         }
 
         public Node getNext() {

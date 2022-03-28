@@ -37,4 +37,7 @@ public interface TaskManager {
     void removeById(long getId); //Удаление по индефикатору
 
     List<Subtask> getSubtaskOfEpic(Epic epic);
+
+public List<Task> history();
+    public Long getId();
 }

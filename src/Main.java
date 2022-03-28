@@ -2,7 +2,7 @@ public class Main {
       static InMemoryTaskManager manager = new InMemoryTaskManager();
 
       //Эта версия загружена исключительно, чтобы не просрочитеть дедлайн.
-    //Прошу понять и простить)) Проверять её особо смысла нет, она отровенно не доделана
+    //Она ещё достаточно сырая. Прошу понять и простить))
 
 
     public static void main(String[] args) {
@@ -21,10 +21,14 @@ public class Main {
         manager.putSubtask(buySpares);
         manager.putSubtask(comeService);
         manager.putEpic(buyFood);
+        System.out.println(washedDishes.getId());
+        System.out.println(takeOutTrash.getId());
+        System.out.println(manager.getId());
+
 
     manager.getTaskById(1L);
     manager.getTaskById(2L);
-        System.out.println(manager.history);
+    System.out.println(manager.history());
 
 
 }
