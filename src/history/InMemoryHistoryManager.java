@@ -1,10 +1,11 @@
 package history;
 
+import tasktypes.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import tasktypes;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -40,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         removeNode(node);
     }
 
-       public void linkLast(Task task) {
+       private void linkLast(Task task) {
         if (references.containsKey(task.getId())) {
             removeNode(references.get(task.getId()));
         }
@@ -60,7 +61,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         references.put(task.getId(), last);
     }
 
-    public void removeNode(Node node) {
+    private void removeNode(Node node) {
         if (node != null) {
             final Node prev = node.getPrev();
             final Node next = node.getNext();
