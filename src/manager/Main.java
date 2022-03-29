@@ -1,11 +1,14 @@
+package manager;
+
+import tasktypes.Epic;
+import tasktypes.Status;
+import tasktypes.Subtask;
+import tasktypes.Task;
+
 public class Main {
       static InMemoryTaskManager manager = new InMemoryTaskManager();
 
-      //Эта версия загружена исключительно, чтобы не просрочитеть дедлайн.
-    //Она ещё достаточно сырая. Прошу понять и простить))
-
-
-    public static void main(String[] args) {
+          public static void main(String[] args) {
         System.out.println("Пришло время практики!");
 
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", Status.NEW);

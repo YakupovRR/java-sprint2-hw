@@ -1,7 +1,9 @@
+package history;
+
 import java.util.List;
 
 public interface HistoryManager {
-    void linkLast(Task task);
-    void removeNode(Long id);
+   void add(Task task);
+   void remove(Long id);
     List<Task> history();
-}
+  }

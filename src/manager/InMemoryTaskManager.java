@@ -1,3 +1,10 @@
+package manager;
+
+import history.HistoryManager;
+import tasktypes.Epic;
+import tasktypes.Subtask;
+import tasktypes.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,13 +95,13 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
             return null;
         } else if (epicMap.containsKey(desiredId)) {
-            historyManager.linkLast((Task) epicMap.get(desiredId));
+            historyManager.add((Task) epicMap.get(desiredId));
             return (Task) epicMap.get(desiredId);
         } else if (subtaskMap.containsKey(desiredId)) {
-            historyManager.linkLast((Task) subtaskMap.get(desiredId));
+            historyManager.add((Task) subtaskMap.get(desiredId));
             return (Task) subtaskMap.get(desiredId);
         } else if (taskMap.containsKey(desiredId)) {
-            historyManager.linkLast(taskMap.get(desiredId));
+            historyManager.add(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
             System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
@@ -150,15 +157,15 @@ class InMemoryTaskManager implements TaskManager {
             System.out.println("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
             epicMap.remove(getId);
-            historyManager.removeNode(getId);
+            historyManager.remove(getId);
         } else if (subtaskMap.containsKey(getId)) {
             Subtask deleteSubtask = subtaskMap.remove(getId);
             deleteSubtask.getParentEpic().deleteFromincludedSubtaks(deleteSubtask);
             deleteSubtask.getParentEpic().updateStatusEpic();
-            historyManager.removeNode(getId);
+            historyManager.remove(getId);
         } else if (taskMap.containsKey(getId)) {
             taskMap.remove(getId);
-            historyManager.removeNode(getId);
+            historyManager.remove(getId);
         } else {
             System.out.println("Задачи с таким id не существует. Вероятно, она уже была удалена");
         }
