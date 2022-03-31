@@ -11,11 +11,11 @@ import java.util.Map;
 public class InMemoryHistoryManager implements HistoryManager {
     private static Node head = null;
     private static Node tail = null;
-   private Map<Long, Node> references;
+    private Map<Long, Node> references;
 
     public InMemoryHistoryManager() {
         this.references = new HashMap<>();
-            }
+    }
 
     @Override
     public List<Task> history() {     //вызов истории
@@ -41,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         removeNode(node);
     }
 
-       private void linkLast(Task task) {
+    private void linkLast(Task task) {
         if (references.containsKey(task.getId())) {
             removeNode(references.get(task.getId()));
         }

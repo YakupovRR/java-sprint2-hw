@@ -35,7 +35,7 @@ public class Epic extends Task {
         }
     }
 
-    public void clearOfSubtusks () {
+    public void clearOfSubtusks() {
         includedSubtaks.clear();
     }
 
@@ -43,7 +43,7 @@ public class Epic extends Task {
         includedSubtaks.add(subtask);
     }
 
-    public void deleteFromincludedSubtaks (Subtask subtask) {
+    public void deleteFromincludedSubtaks(Subtask subtask) {
         includedSubtaks.remove(subtask);
     }
 

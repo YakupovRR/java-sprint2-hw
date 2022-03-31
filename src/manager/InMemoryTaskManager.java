@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 class InMemoryTaskManager implements TaskManager {
     private Long id = 1L;
     HashMap<Long, Task> taskMap = new HashMap<>();
@@ -185,7 +184,8 @@ class InMemoryTaskManager implements TaskManager {
     public List<Task> history() {
         return historyManager.history();
     }
-@Override
+
+    @Override
     public Long getId() {
         return id;
     }

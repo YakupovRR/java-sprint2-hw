@@ -6,7 +6,6 @@ import tasktypes.Task;
 
 import java.util.HashMap;
 import java.util.List;
-import static manager.Main.manager;
 
 public interface TaskManager {
 
@@ -45,6 +44,7 @@ public interface TaskManager {
 
     List<Subtask> getSubtaskOfEpic(Epic epic);
 
-public List<Task> history();
+    public List<Task> history();
+
     public Long getId();
 }
