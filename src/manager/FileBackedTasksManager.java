@@ -25,7 +25,8 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
 
     public static void main(String[] args) {
         File file = new File("Task manager.csv");
-        FileBackedTasksManager taskManager = loadFromFile(file);
+        FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
+        taskManager.loadFromFile(file);
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", Status.NEW);
         Epic fixCar = new Epic("Починить машину", "Починить ходовку", Status.NEW);
         Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки", Status.IN_PROGRESS, fixCar);
@@ -37,7 +38,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
     }
 
 
-    void save() {  //сохранение в файл
+    public void save() {  //сохранение в файл
         TreeMap<Long, String> allTasks = new TreeMap<>(Comparator.comparingLong(o -> o));
 
         for (Task task : taskMap.values()) {
@@ -62,7 +63,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         }
     }
 
-    String toString(Task task) {    //создание строки из задачи
+    public String toString(Task task) {    //создание строки из задачи
         String str = (getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
                 + task.getDescription());
         if (task.getType() == SUBTASK) {
@@ -71,7 +72,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         return str;
     }
 
-     static Task fromString(String value) {             //создание задачи из строки
+    public Task fromString(String value) {             //создание задачи из строки
         String[] readenTask = value.split(",");
         switch (readenTask[1]) {
             case ("TASK"):
@@ -83,7 +84,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
                 epicMap.put(Long.valueOf(readenTask[0]), (Epic) epic);
                 return epic;
             case ("SUBTASK"):
-                Epic parentEpic = (Epic) TaskManager.getTaskById(Long.valueOf(readenTask[5]));
+                Epic parentEpic = (Epic) getTaskById(Long.valueOf(readenTask[5]));
                 Subtask subtask = new Subtask(readenTask[2], readenTask[4], Status.valueOf(readenTask[3]), parentEpic);
                 parentEpic.updateStatusEpic();
                 subtaskMap.put(Long.valueOf(readenTask[0]), subtask);
@@ -94,30 +95,30 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         }
     }
 
-    static String toString(HistoryManager manager) { //сохранения менеджера истории в CSV
+    public static String toString(HistoryManager manager) { //сохранения менеджера истории в CSV
         String str = String.join(",", toString((HistoryManager) manager.history()));
         return str;
     }
 
-     static void fromStringToHistrory(String value) { //восстановление истории из CSV
+    public void fromStringToHistrory(String value) { //восстановление истории из CSV
         List<String> tasksId = List.of(value.split(","));
         List<Integer> history = new ArrayList<>();
 
         for (String i : tasksId) {
             Long id = Long.valueOf(i);
-            TaskManager.getTaskById(id);      //у нас в методе getTaskById прописано добавление в историю;
+            getTaskById(id);      //у нас в методе getTaskById прописано добавление в историю;
             // по идее в процессе чтения из файла лист истории должен обновиться.
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(File file) { //восстанавливаем данные менеджера из файла
+    public FileBackedTasksManager loadFromFile(File file) { //восстанавливаем данные менеджера из файла
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
 
         try (FileReader fileReader = new FileReader(file, Charset.forName("UTF-8"))) {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             List<String> tasks = new ArrayList<>();
             String line = bufferedReader.readLine();
-            while (line != null)  {    //читаем до пустой строки-разделителя
+            while (line != null) {    //читаем до пустой строки-разделителя
                 line = bufferedReader.readLine();
                 if (!(line.trim().length() == 0)) {
                     tasks.add(line);
@@ -141,14 +142,13 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
                         throw new IllegalStateException("Ошибка при чтении типа задачи: " + task.getType());
                 }
 
-               line = bufferedReader.readLine(); //считываем строку с историей
-              fromStringToHistrory(line);
+                line = bufferedReader.readLine(); //считываем строку с историей
+                fromStringToHistrory(line);
 
                 fileBackedTasksManager.setId(Long.valueOf(tasks.size() - 2));
             }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new ManagerSaveException();
         }
         return fileBackedTasksManager;
 
