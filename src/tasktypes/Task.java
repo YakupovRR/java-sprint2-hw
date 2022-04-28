@@ -5,12 +5,14 @@ public class Task {
     private String description;
     private Long id;
     private Status status;
+    private TasksTypes type = TasksTypes.TASK;
+
 
     public Task(String title, String description, Status status) {
         this.title = title;
         this.description = description;
         this.status = status;
-    }
+           }
 
     public String getTitle() {
         return title;
@@ -42,5 +44,17 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public String toString() {
+        return "Task.Task{" +
+                "title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
+    public TasksTypes getType() {
+        return type;
     }
 }

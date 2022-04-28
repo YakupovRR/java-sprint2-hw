@@ -2,6 +2,7 @@ package tasktypes;
 
 public class Subtask extends Task {
     private Epic parentEpic;
+    private TasksTypes type = TasksTypes.SUBTASK;
 
     public Subtask(String title, String description, Status status, Epic parentEpic) {
         super(title, description, status);

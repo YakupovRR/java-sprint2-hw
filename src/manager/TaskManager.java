@@ -29,7 +29,7 @@ public interface TaskManager {
 
     void clearSubtasks();
 
-    Task getTaskById(Long desiredId);  //получение задачи по id
+    Task getTaskById(Long desiredId);
 
     void putTask(Task task);                     // Созданние.
 
@@ -47,4 +47,6 @@ public interface TaskManager {
     public List<Task> history();
 
     public Long getId();
+
+    public void setId(Long id);
 }

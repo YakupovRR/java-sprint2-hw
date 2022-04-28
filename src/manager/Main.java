@@ -1,18 +1,11 @@
 package manager;
 
-import tasktypes.Epic;
-import tasktypes.Status;
-import tasktypes.Subtask;
-import tasktypes.Task;
-
-//Код просмотерел, вроде всё выровнял. Если где-то осталось, просьба не бить ногами)
 
 public class Main {
-    static TaskManager manager = (InMemoryTaskManager) Managers.getDefault();  //честно, так и не понял,
-    //как иначе это реализовать. Такой вариант подсказали в слаке; но что-о я сомневаюсь))
-    // static InMemoryTaskManager manager = new InMemoryTaskManager(); - а чем плоха такая реализация?
+    static TaskManager manager = (InMemoryTaskManager) Managers.getDefault();
 
-    public static void main(String[] args) {
+
+ /*   public static void main(String[] args) {
         System.out.println("Пришло время практики!");
 
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", Status.NEW);
@@ -36,5 +29,5 @@ public class Main {
         manager.getTaskById(1L);
         manager.getTaskById(2L);
         System.out.println(manager.history());
-    }
+    }*/
 }
