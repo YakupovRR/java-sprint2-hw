@@ -111,7 +111,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         }
     }
 
-    public FileBackedTasksManager loadFromFile(File file) { //восстанавливаем данные менеджера из файла
+    public FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {//восстанавливаем данные из файла
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
 
         try (FileReader fileReader = new FileReader(file, Charset.forName("UTF-8"))) {
