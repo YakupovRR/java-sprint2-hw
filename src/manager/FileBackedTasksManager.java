@@ -26,7 +26,6 @@ class FileBackedTasksManager extends InMemoryTaskManager {
     public static void main(String[] args) throws ManagerSaveException {
         File file = new File("Task manager.csv");
         FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
-        taskManager.loadFromFile(file);
         Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", Status.NEW);
         Epic fixCar = new Epic("Починить машину", "Починить ходовку", Status.NEW);
         Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки",
@@ -37,6 +36,7 @@ class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.putTask(buySpares);
 
         FileBackedTasksManager taskManagerFromFile = new FileBackedTasksManager(file);
+        taskManagerFromFile.loadFromFile(file);
 
 
     }
