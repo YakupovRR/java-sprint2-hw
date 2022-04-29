@@ -156,7 +156,7 @@ class FileBackedTasksManager extends InMemoryTaskManager {
                 fileBackedTasksManager.setId(Long.valueOf(tasks.size() - 2));
             }
         } catch (IOException e) {
-            throw new ManagerSaveException();
+            throw new ManagerSaveException("Ошибка при чтении файла");
         }
         return fileBackedTasksManager;
 
