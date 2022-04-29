@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-class InMemoryTaskManager implements TaskManager {
-    private static Long id = 1L;
-    static HashMap<Long, Task> taskMap = new HashMap<>();
-    static HashMap<Long, Epic> epicMap = new HashMap<>();
-    static HashMap<Long, Subtask> subtaskMap = new HashMap<>();
-    static HistoryManager historyManager = Managers.getDefaultHistory();
+public class InMemoryTaskManager implements TaskManager {
+    protected Long id = 1L;
+    protected HashMap<Long, Task> taskMap = new HashMap<>();
+    protected HashMap<Long, Epic> epicMap = new HashMap<>();
+    protected HashMap<Long, Subtask> subtaskMap = new HashMap<>();
+    protected HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
     public HashMap<Long, Epic> getEpicMap() {

@@ -1,6 +1,6 @@
-package manager;
-
-
+import manager.InMemoryTaskManager;
+import manager.Managers;
+import manager.TaskManager;
 public class Main {
     static TaskManager manager = (InMemoryTaskManager) Managers.getDefault();
 

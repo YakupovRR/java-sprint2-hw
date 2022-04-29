@@ -15,9 +15,9 @@ import java.util.TreeMap;
 
 import static tasktypes.TasksTypes.SUBTASK;
 
-class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager {
+class FileBackedTasksManager extends InMemoryTaskManager {
 
-    File file;
+    private File file;
 
     public FileBackedTasksManager(File file) {
         this.file = file;
@@ -35,6 +35,10 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         taskManager.putTask(washedDishes);
         taskManager.putTask(fixCar);
         taskManager.putTask(buySpares);
+
+        FileBackedTasksManager taskManagerFromFile = new FileBackedTasksManager(file);
+
+
     }
 
     public void save() {  //сохранение в файл
@@ -63,10 +67,10 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
     }
 
     public String toString(Task task) {    //создание строки из задачи
-        String str = (getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
-                + task.getDescription());
+        String str = getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
+                + task.getDescription() + ",";
         if (task.getType() == SUBTASK) {
-            str = str + "," + ((Subtask) task).getParentEpic().getId();
+            str = str + ((Subtask) task).getParentEpic().getId();
         }
         return str;
     }
@@ -94,8 +98,13 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         }
     }
 
-    public static String toString(HistoryManager manager) { //сохранения менеджера истории в CSV
-        String str = String.join(",", toString((HistoryManager) manager.history()));
+    public String toString(HistoryManager manager) { //сохранения менеджер истории в CSV
+        String str;
+        List<Long> taskId = new ArrayList<>();
+                for (Task i: manager.history()) {
+                    taskId.add(i.getId());
+                }
+                str = String.join(",", (CharSequence) taskId);
         return str;
     }
 
@@ -105,12 +114,12 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
 
         for (String i : tasksId) {
             Long id = Long.valueOf(i);
-            getTaskById(id);      //у нас в методе getTaskById прописано добавление в историю;
-            // по идее в процессе чтения из файла лист истории должен обновиться.
+            historyManager.add(getTaskById(id));
         }
     }
 
-    public FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {//восстанавливаем данные из файла
+    public static FileBackedTasksManager loadFromFile(File file) throws ManagerSaveException {
+        //восстанавливаем данные из файла
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
 
         try (FileReader fileReader = new FileReader(file, Charset.forName("UTF-8"))) {
@@ -124,7 +133,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
                 }
             }
             for (String str : tasks) {
-                Task task = fromString(str);
+                Task task = fileBackedTasksManager.fromString(str);
 
                 switch (task.getType()) {
                     case TASK:
@@ -142,7 +151,7 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
                 }
 
                 line = bufferedReader.readLine(); //считываем строку с историей
-                fromStringToHistrory(line);
+                fileBackedTasksManager.fromStringToHistrory(line);
 
                 fileBackedTasksManager.setId(Long.valueOf(tasks.size() - 2));
             }
@@ -188,4 +197,5 @@ class FileBackedTasksManager extends InMemoryTaskManager implements TaskManager 
         removeById(getId);
         save();
     }
+
 }
