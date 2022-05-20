@@ -13,6 +13,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Long, Epic> epicMap = new HashMap<>();
     protected HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
+    protected TreeSet<Task> prioritizedTasks = calcPrioritizedTasks();
 
     @Override
     public HashMap<Long, Epic> getEpicMap() {
@@ -73,14 +74,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearEpics() {
-        subtaskMap.clear();   //на случай, если вдруг решим удалить только эпики, а такси оставить
+        subtaskMap.clear();
         epicMap.clear();
     }
 
     @Override
     public void clearSubtasks() {
         subtaskMap.clear();
-        for (Epic i : epicMap.values()) { //на случай, если вдруг решим удалить только сабтаски, а эпики оставить
+        for (Epic i : epicMap.values()) {
             i.getincludedSubtaks().clear();
             i.updateStatusEpic();
         }
@@ -107,6 +108,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
+
+//не понял, что требуется
+
     public void putTask(Task task) {                    // Созданние.
         if (isNotСrossing(task)) {
             task.setId(id);
@@ -200,17 +204,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-
-    public TreeSet<Task> getPrioritizedTasks() {
+    public TreeSet<Task> calcPrioritizedTasks() {
 
         TreeSet<Task> tasks = new TreeSet<Task>(new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-               if (o1.getStartTime().equals(null)) {
-                   return 1;
-               } else if (o2.getStartTime().equals(null)) {
-                   return -1;
-               }if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                if (o1.getStartTime().equals(null)) {
+                    return 1;
+                } else if (o2.getStartTime().equals(null)) {
+                    return -1;
+                }
+                if (o1.getStartTime().isBefore(o2.getStartTime())) {
                     return -1;
                 } else return 1;
             }
@@ -225,6 +229,11 @@ public class InMemoryTaskManager implements TaskManager {
             tasks.add(task);
         }
         return tasks;
+    }
+
+    @Override
+    public TreeSet<Task> getPrioritizedTasks() {
+        return prioritizedTasks;
     }
 
     public boolean isNotСrossing(Task newTask) {

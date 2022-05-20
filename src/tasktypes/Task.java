@@ -6,8 +6,8 @@ public class Task {
     private String title;
     private String description;
     private Long id;
-    private Status status;
-    private TasksTypes type = TasksTypes.TASK;
+    protected Status status;
+    protected TasksTypes type;
     protected int duration;
     protected LocalDateTime startTime;
 
@@ -17,7 +17,14 @@ public class Task {
         this.status = status;
         this.duration = duration;
         this.startTime = startTime;
+        this.type = TasksTypes.TASK;
     }
+
+    protected Task(String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
+
 
     public String getTitle() {
         return title;

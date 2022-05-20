@@ -8,15 +8,17 @@ import java.util.List;
 public class Epic extends Task {
 
     private List<Subtask> includedSubtaks;
-    private TasksTypes type = TasksTypes.EPIC;
-    private LocalDateTime endTime = getEndTime();
+    private LocalDateTime endTime;
 
-
-    public Epic(String title, String description, Status status, int duration, LocalDateTime startTime) {
-        super(title, description, status, duration, startTime);
+//дописать статус
+    public Epic(String title, String description) {
+        super(title, description);
+        this.status = getStatus();
         this.includedSubtaks = new ArrayList<>();
-        this.startTime = getStartTime(includedSubtaks);
-        this.duration = getDuration(startTime);
+        this.startTime = calcStartTime();
+        this.duration = calcDuration();
+        this.endTime = calcEndTime();
+        this.type = TasksTypes.EPIC;
     }
 
     public void updateStatusEpic() {               //Проверка статуса эпика
@@ -63,8 +65,8 @@ public class Epic extends Task {
         this.includedSubtaks = includedSubtaks;
     }
 
-    public LocalDateTime getStartTime(List<Subtask> includedSubtaks) {
-        LocalDateTime startTime = null; ///////
+    public LocalDateTime calcStartTime() {
+        LocalDateTime startTime = null;
         if (includedSubtaks.isEmpty()) {
             return startTime;
         } else {
@@ -79,7 +81,11 @@ public class Epic extends Task {
         }
     }
 
-    public LocalDateTime getEndTime(List<Subtask> includedSubtaks) {
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public LocalDateTime calcEndTime() {
         LocalDateTime endTime = null;
         if (includedSubtaks.isEmpty()) {
             return endTime;
@@ -95,13 +101,20 @@ public class Epic extends Task {
         }
     }
 
-    public int getDuration(LocalDateTime startTime) {
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    private int calcDuration() {
         int duration = (int) Duration.between(startTime, endTime).toMinutes();
+        return duration;
+    }
+
+    public int getDuration() {
         return duration;
     }
 
     public List<Subtask> getIncludedSubtaks() {
         return includedSubtaks;
     }
-
 }

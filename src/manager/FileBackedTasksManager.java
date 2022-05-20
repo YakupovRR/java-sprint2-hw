@@ -71,7 +71,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 taskMap.put(Long.valueOf(readenTask[0]), task);
                 return task;
             case ("EPIC"):
-                Task epic = new Epic(title, discription, status, duration, startTime);
+                Task epic = new Epic(title, discription);
                 epicMap.put(Long.valueOf(readenTask[0]), (Epic) epic);
                 return epic;
             case ("SUBTASK"):
@@ -186,4 +186,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
     }
 
+    public static class Main {
+        static TaskManager manager = (InMemoryTaskManager) Managers.getDefault();
+
+    }
 }
