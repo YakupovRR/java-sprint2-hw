@@ -6,6 +6,7 @@ import tasktypes.Task;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
 
@@ -49,4 +50,8 @@ public interface TaskManager {
     public Long getId();
 
     public void setId(Long id);
+
+    public Set<Task> getPrioritizedTasks();
+
+    public boolean isNotСrossing(Task newTask);
 }

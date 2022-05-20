@@ -1,11 +1,14 @@
 package tasktypes;
 
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private Epic parentEpic;
     private TasksTypes type = TasksTypes.SUBTASK;
 
-    public Subtask(String title, String description, Status status, Epic parentEpic) {
-        super(title, description, status);
+    public Subtask(String title, String description, Status status, int duration,
+                   LocalDateTime startTime, Epic parentEpic) {
+        super(title, description, status, duration, startTime);
         this.parentEpic = parentEpic;
     }
 
@@ -17,5 +20,5 @@ public class Subtask extends Task {
         this.parentEpic = parentEpic;
     }
 
-    }
+}
 

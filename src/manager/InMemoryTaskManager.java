@@ -5,9 +5,7 @@ import tasktypes.Epic;
 import tasktypes.Subtask;
 import tasktypes.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected Long id = 1L;
@@ -110,9 +108,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void putTask(Task task) {                    // Созданние.
-        task.setId(id);
-        taskMap.put(id, task);
-        id++;
+        if (isNotСrossing(task)) {
+            task.setId(id);
+            taskMap.put(id, task);
+            id++;
+        }
     }
 
     @Override
@@ -124,29 +124,33 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void putSubtask(Subtask subtask) {
-        subtask.setId(id);
-        subtaskMap.put(id, subtask);
-        (subtask.getParentEpic()).addNewSubtusk(subtask);
-        subtask.getParentEpic().updateStatusEpic();
-        id++;
+        if (isNotСrossing(subtask)) {
+            subtask.setId(id);
+            subtaskMap.put(id, subtask);
+            (subtask.getParentEpic()).addNewSubtusk(subtask);
+            subtask.getParentEpic().updateStatusEpic();
+            id++;
+        }
     }
 
     @Override
     public void updateTask(Long replaceId, Task replaceTask) {       //Обновление задачи
-        replaceTask.setId(replaceId);
-        if (replaceId < 1 || replaceId > id) {
-            System.out.println("Некорректный ввод id обновляемой задачи");
-        } else if (epicMap.containsKey(replaceId)) {
-            epicMap.put(replaceId, (Epic) replaceTask);
-        } else if (subtaskMap.containsKey(replaceId)) {
-            subtaskMap.put(replaceId, (Subtask) replaceTask);
-            Epic parentEpic = ((Subtask) replaceTask).getParentEpic();
-            parentEpic.addNewSubtusk((Subtask) replaceTask);
-            parentEpic.updateStatusEpic();
-        } else if (taskMap.containsKey(replaceId)) {
-            taskMap.put(replaceId, replaceTask);
-        } else {
-            System.out.println("Задачи с таким id не найдено. Возможно, она была удалена");
+        if (isNotСrossing(replaceTask)) {
+            replaceTask.setId(replaceId);
+            if (replaceId < 1 || replaceId > id) {
+                System.out.println("Некорректный ввод id обновляемой задачи");
+            } else if (epicMap.containsKey(replaceId)) {
+                epicMap.put(replaceId, (Epic) replaceTask);
+            } else if (subtaskMap.containsKey(replaceId)) {
+                subtaskMap.put(replaceId, (Subtask) replaceTask);
+                Epic parentEpic = ((Subtask) replaceTask).getParentEpic();
+                parentEpic.addNewSubtusk((Subtask) replaceTask);
+                parentEpic.updateStatusEpic();
+            } else if (taskMap.containsKey(replaceId)) {
+                taskMap.put(replaceId, replaceTask);
+            } else {
+                System.out.println("Задачи с таким id не найдено. Возможно, она была удалена");
+            }
         }
     }
 
@@ -195,5 +199,73 @@ public class InMemoryTaskManager implements TaskManager {
         this.id = id;
     }
 
+    @Override
+
+    public TreeSet<Task> getPrioritizedTasks() {
+
+        TreeSet<Task> tasks = new TreeSet<Task>(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+               if (o1.getStartTime().equals(null)) {
+                   return 1;
+               } else if (o2.getStartTime().equals(null)) {
+                   return -1;
+               }if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                } else return 1;
+            }
+        });
+
+        for (Long i : taskMap.keySet()) {
+            Task task = taskMap.get(i);
+            tasks.add(task);
+        }
+        for (Long i : subtaskMap.keySet()) {
+            Task task = subtaskMap.get(i);
+            tasks.add(task);
+        }
+        return tasks;
+    }
+
+    public boolean isNotСrossing(Task newTask) {
+        TreeSet<Task> tasks = getPrioritizedTasks();
+        tasks.add(newTask);
+        List<Task> tasksList = new ArrayList<>();
+        boolean notСrossing = true;
+        boolean newTaskInList = false;
+        int numberNewTaskInList = 0;
+        //переносим сортированный TreeSet в List, "отлавливая" местоположение новой задачи
+        for (Task i : tasks) {
+            tasksList.add(i);
+            if (newTaskInList) {       //если новая задача в листе, мы предварительно добавим следующею
+                //и выйдем из цикла, дальше нам неинтересно
+                break;
+            }
+            if (!i.equals(newTask)) {
+                numberNewTaskInList++;
+            } else {
+                newTaskInList = true;
+            }
+        }
+        if ((numberNewTaskInList > 0) && (newTask.getStartTime().isBefore(tasksList.get(
+                numberNewTaskInList - 1).getEndTime()))) {
+            notСrossing = false;
+            System.out.println("Время начала новой задачи пересекается с временем окончания задачи № "
+                    + tasksList.get(numberNewTaskInList - 1).getId());
+        }
+        if ((numberNewTaskInList < (tasksList.size() - 1)) && (newTask.getEndTime().isAfter(tasksList.get(
+                numberNewTaskInList + 1).getStartTime()))) {
+            notСrossing = false;
+            System.out.println("Время окончания новой задачи пересекается с временем начала задачи № "
+                    + tasksList.get(numberNewTaskInList + 1).getId());
+        }
+        return notСrossing;
+    }
 }
+
+
+
+
+
+
 

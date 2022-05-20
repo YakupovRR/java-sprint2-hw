@@ -8,6 +8,7 @@ import tasktypes.Task;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.TreeMap;
 
 import static tasktypes.TasksTypes.SUBTASK;
 
-class FileBackedTasksManager extends InMemoryTaskManager {
+public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private File file;
 
@@ -23,21 +24,7 @@ class FileBackedTasksManager extends InMemoryTaskManager {
         this.file = file;
     }
 
-    public static void main(String[] args) throws ManagerSaveException {
-        File file = new File("Task manager.csv");
-        FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
-        Task washedDishes = new Task("Помыть посуду", "Помыть уже наконец посуду", Status.NEW);
-        Epic fixCar = new Epic("Починить машину", "Починить ходовку", Status.NEW);
-        Subtask buySpares = new Subtask("Купить запчасти", "Купить втулки стабилизатора и стойки",
-                Status.IN_PROGRESS, fixCar);
-        taskManager.putTask(washedDishes);
-        taskManager.putTask(fixCar);
-        taskManager.putTask(buySpares);
-
-        FileBackedTasksManager taskManagerFromFile =FileBackedTasksManager.loadFromFile(file);
-    }
-
-    public void save() {  //сохранение в файл
+      public void save() {  //сохранение в файл
         TreeMap<Long, String> allTasks = new TreeMap<>(Comparator.comparingLong(o -> o));
 
         for (Task task : taskMap.values()) {
@@ -64,7 +51,7 @@ class FileBackedTasksManager extends InMemoryTaskManager {
 
     public String toCSV(Task task) {    //создание строки из задачи
         String str = getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
-                + task.getDescription() + ",";
+                + task.getDescription() + "," + task.getDuration() + "," + task.getStartTime() + ",";
         if (task.getType() == SUBTASK) {
             str = str + ((Subtask) task).getParentEpic().getId();
         }
@@ -73,18 +60,23 @@ class FileBackedTasksManager extends InMemoryTaskManager {
 
     public Task fromString(String value) {             //создание задачи из строки
         String[] readenTask = value.split(",");
+        String title = readenTask[2];
+        String discription = readenTask[4];
+        Status status = Status.valueOf(readenTask[3]);
+        int duration = Integer.parseInt(readenTask[5]);
+        LocalDateTime startTime = LocalDateTime.parse(readenTask[6]);
         switch (readenTask[1]) {
             case ("TASK"):
-                Task task = new Task(readenTask[2], readenTask[4], Status.valueOf(readenTask[3]));
+                Task task = new Task(title, discription, status, duration, startTime);
                 taskMap.put(Long.valueOf(readenTask[0]), task);
                 return task;
             case ("EPIC"):
-                Task epic = new Epic(readenTask[2], readenTask[4], Status.valueOf(readenTask[3]));
+                Task epic = new Epic(title, discription, status, duration, startTime);
                 epicMap.put(Long.valueOf(readenTask[0]), (Epic) epic);
                 return epic;
             case ("SUBTASK"):
                 Epic parentEpic = (Epic) getTaskById(Long.valueOf(readenTask[5]));
-                Subtask subtask = new Subtask(readenTask[2], readenTask[4], Status.valueOf(readenTask[3]), parentEpic);
+                Subtask subtask = new Subtask(title, discription, status, duration, startTime, parentEpic);
                 parentEpic.updateStatusEpic();
                 subtaskMap.put(Long.valueOf(readenTask[0]), subtask);
                 return subtask;
@@ -97,10 +89,10 @@ class FileBackedTasksManager extends InMemoryTaskManager {
     public String toCSV(HistoryManager manager) { //сохранения менеджер истории в CSV
         String str;
         List<Long> taskId = new ArrayList<>();
-                for (Task i: manager.history()) {
-                    taskId.add(i.getId());
-                }
-                str = String.join(",",  String.valueOf(taskId));
+        for (Task i : manager.history()) {
+            taskId.add(i.getId());
+        }
+        str = String.join(",", String.valueOf(taskId));
         return str;
     }
 
