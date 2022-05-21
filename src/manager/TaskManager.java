@@ -50,8 +50,6 @@ public interface TaskManager {
 
     public void setId(Long id);
 
-    public TreeSet<Task> calcPrioritizedTasks();
-
     public TreeSet<Task> getPrioritizedTasks();
 
     public boolean isNotСrossing(Task newTask);

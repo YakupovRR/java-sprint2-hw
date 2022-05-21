@@ -13,7 +13,19 @@ public class InMemoryTaskManager implements TaskManager {
     protected HashMap<Long, Epic> epicMap = new HashMap<>();
     protected HashMap<Long, Subtask> subtaskMap = new HashMap<>();
     protected HistoryManager historyManager = Managers.getDefaultHistory();
-    protected TreeSet<Task> prioritizedTasks = calcPrioritizedTasks();
+    protected TreeSet<Task> prioritizedTasks = new TreeSet<Task>(new Comparator<Task>() {
+        @Override
+        public int compare(Task o1, Task o2) {
+            if (o1.getStartTime().equals(null)) {
+                return 1;
+            } else if (o2.getStartTime().equals(null)) {
+                return -1;
+            }
+            if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                return -1;
+            } else return 1;
+        }
+    });
 
     @Override
     public HashMap<Long, Epic> getEpicMap() {
@@ -65,6 +77,7 @@ public class InMemoryTaskManager implements TaskManager {
         clearTasks();
         clearEpics();
         clearSubtasks();
+        prioritizedTasks.clear();
     }
 
     @Override
@@ -88,7 +101,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTaskById(Long desiredId) {              //получение задачи по id
+    public Task getTaskById(Long desiredId) {           //получение задачи по id
         if (desiredId < 1 || desiredId > id) {
             System.out.println("Некорректный ввод id");
             return null;
@@ -102,19 +115,17 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.add(taskMap.get(desiredId));
             return taskMap.get(desiredId);
         } else {
-            System.out.println("Задачи с таким id не найдено. Вероятно, она была удалена");
+            System.out.println("Некорректный ввод id");
             return null;
         }
     }
 
     @Override
-
-//не понял, что требуется
-
     public void putTask(Task task) {                    // Созданние.
         if (isNotСrossing(task)) {
             task.setId(id);
             taskMap.put(id, task);
+            prioritizedTasks.add(task);
             id++;
         }
     }
@@ -123,6 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void putEpic(Epic epic) {
         epic.setId(id);
         epicMap.put(id, epic);
+        prioritizedTasks.add(epic);
         id++;
     }
 
@@ -133,6 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
             subtaskMap.put(id, subtask);
             (subtask.getParentEpic()).addNewSubtusk(subtask);
             subtask.getParentEpic().updateStatusEpic();
+            prioritizedTasks.add(subtask);
             id++;
         }
     }
@@ -144,13 +157,19 @@ public class InMemoryTaskManager implements TaskManager {
             if (replaceId < 1 || replaceId > id) {
                 System.out.println("Некорректный ввод id обновляемой задачи");
             } else if (epicMap.containsKey(replaceId)) {
+               prioritizedTasks.remove(getTaskById(replaceId));
+                prioritizedTasks.add(replaceTask);
                 epicMap.put(replaceId, (Epic) replaceTask);
             } else if (subtaskMap.containsKey(replaceId)) {
+                prioritizedTasks.remove(getTaskById(replaceId));
+                prioritizedTasks.add(replaceTask);
                 subtaskMap.put(replaceId, (Subtask) replaceTask);
                 Epic parentEpic = ((Subtask) replaceTask).getParentEpic();
                 parentEpic.addNewSubtusk((Subtask) replaceTask);
                 parentEpic.updateStatusEpic();
             } else if (taskMap.containsKey(replaceId)) {
+                prioritizedTasks.remove(getTaskById(replaceId));
+                prioritizedTasks.add(replaceTask);
                 taskMap.put(replaceId, replaceTask);
             } else {
                 System.out.println("Задачи с таким id не найдено. Возможно, она была удалена");
@@ -159,22 +178,25 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeById(long getId) {                  //Удаление по индефикатору
+    public void removeById(long getId) throws IllegalArgumentException {                  //Удаление по индефикатору
         if (getId < 1 || getId > id) {
-            System.out.println("Некорректный ввод id");
+            throw new IllegalArgumentException("Некорректный ввод id");
         } else if (epicMap.containsKey(getId)) {
+            prioritizedTasks.remove(getTaskById(getId));
             epicMap.remove(getId);
             historyManager.remove(getId);
         } else if (subtaskMap.containsKey(getId)) {
+            prioritizedTasks.remove(getTaskById(getId));
             Subtask deleteSubtask = subtaskMap.remove(getId);
             deleteSubtask.getParentEpic().deleteFromincludedSubtaks(deleteSubtask);
             deleteSubtask.getParentEpic().updateStatusEpic();
             historyManager.remove(getId);
         } else if (taskMap.containsKey(getId)) {
+            prioritizedTasks.remove(getTaskById(getId));
             taskMap.remove(getId);
             historyManager.remove(getId);
         } else {
-            System.out.println("Задачи с таким id не существует. Вероятно, она уже была удалена");
+            throw new IllegalArgumentException("Некорректный ввод id");
         }
     }
 
@@ -204,40 +226,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public TreeSet<Task> calcPrioritizedTasks() {
-
-        TreeSet<Task> tasks = new TreeSet<Task>(new Comparator<Task>() {
-            @Override
-            public int compare(Task o1, Task o2) {
-                if (o1.getStartTime().equals(null)) {
-                    return 1;
-                } else if (o2.getStartTime().equals(null)) {
-                    return -1;
-                }
-                if (o1.getStartTime().isBefore(o2.getStartTime())) {
-                    return -1;
-                } else return 1;
-            }
-        });
-
-        for (Long i : taskMap.keySet()) {
-            Task task = taskMap.get(i);
-            tasks.add(task);
-        }
-        for (Long i : subtaskMap.keySet()) {
-            Task task = subtaskMap.get(i);
-            tasks.add(task);
-        }
-        return tasks;
-    }
-
-    @Override
     public TreeSet<Task> getPrioritizedTasks() {
         return prioritizedTasks;
     }
 
     public boolean isNotСrossing(Task newTask) {
-        TreeSet<Task> tasks = getPrioritizedTasks();
+        TreeSet<Task> tasks = prioritizedTasks;
         tasks.add(newTask);
         List<Task> tasksList = new ArrayList<>();
         boolean notСrossing = true;
